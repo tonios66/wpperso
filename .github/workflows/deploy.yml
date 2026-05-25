@@ -6,13 +6,13 @@ on:
 
 jobs:
   web-deploy:
-    name: 🎉 Deploy
+    name: Deploy
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-versions: [ '20' ]
     steps:
-    - name: 🚚 Get latest code
+    - name: Get latest code
       uses: actions/checkout@v4
 
     - name: Use Node.js ${{ matrix.node-versions }}
@@ -25,7 +25,7 @@ jobs:
         npm ci
         npm run prod
     
-    - name: 📂 Sync files
+    - name: Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
         server: ${{ secrets.FTP_HOST }}
