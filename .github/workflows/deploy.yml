@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy HTML via FTP
 
 on:
   push:
@@ -6,40 +6,20 @@ on:
       - main
 
 jobs:
-  web-deploy:
-    name: Deploy Website
+  deploy:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [22]
-
     steps:
-      # 📥 Récupération du code
+      # 📥 Récupérer le code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 🟢 Setup Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      # 📦 Installation dépendances
-      - name: Install dependencies
-        run: npm install
-
-      # 🏗️ Build projet
-      - name: Build project
-        run: npm run prod
-
       # 🚀 Déploiement FTP
-      - name: Deploy to FTP Server
+      - name: Deploy to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
-          protocol: ftp
-          local-dir: ./wpperso/
+          local-dir: ./
           server-dir: /www/
