@@ -19,18 +19,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 🟢 Installation de Node.js
+      # 🟢 Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: npm
 
-      # 📦 Installation des dépendances
+      # 📦 Installation dépendances
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      # 🏗️ Build du projet
+      # 🏗️ Build projet
       - name: Build project
         run: npm run prod
 
