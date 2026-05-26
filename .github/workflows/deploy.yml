@@ -1,34 +1,45 @@
-name: deploy
+name: Deploy
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   web-deploy:
-    name: Deploy
+    name: Deploy Website
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        node-versions: [ '20' ]
+        node-version: [20]
+
     steps:
-    - name: Get latest code
-      uses: actions/checkout@v4
+      # 📥 Récupération du code
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-versions }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-versions }}
+      # 🟢 Installation de Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
 
-    - name: Build
-      run: |
-        npm ci
-        npm run prod
-    
-    - name: Sync files
-      uses: SamKirkland/FTP-Deploy-Action@4.3.0
-      with:
-        server: ${{ secrets.FTP_HOST }}
-        username: ${{ secrets.FTP_USER }}
-        password: ${{ secrets.FTP_PASS }}
-        server-dir: ./www/
+      # 📦 Installation des dépendances
+      - name: Install dependencies
+        run: npm ci
+
+      # 🏗️ Build du projet
+      - name: Build project
+        run: npm run prod
+
+      # 🚀 Déploiement FTP
+      - name: Deploy to FTP Server
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          local-dir: ./dist/
+          server-dir: /www/
