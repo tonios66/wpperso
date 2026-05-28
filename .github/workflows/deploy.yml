@@ -10,17 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 📥 Récupérer le code
+      # 📥 Récupération du code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 🚀 Déploiement FTP
-      - name: Deploy to FTP
+      # 🚀 Déploiement FTP vers OVH
+      - name: Deploy to OVH FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          protocol: ftps
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
+          protocol: ftps
           local-dir: ./
           server-dir: /www/
